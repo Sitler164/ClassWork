@@ -3,16 +3,30 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Threading;
+
 
 namespace SpaceAnt
 {
-    struct coords
+    struct coordinates
     {
-        public int x;
-        public int y;
+        private int x;
+        private int y;
+
+        public int X
+        {
+            get { return x; }
+            set { x = value; }
+        }
+
+        public int Y
+        {
+            get { return y; }
+            set { y = value; }
+        }
     }
 
-    enum MoveState
+    enum MoveStateForSolider
     {
         up = 4,
         down = 4,
@@ -20,59 +34,11 @@ namespace SpaceAnt
         right = 4
     }
 
-    class Ant
-    {
-        protected string job;
-        protected coords c;
-        protected Random rnd = new Random();
 
-        public Ant(coords c, string j)
-        {
-            this.c = c;
-            job = j;
-        }
-
-        public virtual void Move()
-        {
-            int dir = rnd.Next(0, 4);
-            int step = rnd.Next(1, 10);
-            for (int i = 0; i < step; i++)
-            {
-                switch (dir)
-                {
-                    case 0:
-                        c.x += 1;
-                        break;
-                    case 1:
-                        c.y += 1;
-                        break;
-                    case 2:
-                        c.y += 1;
-                        break;
-                    case 3:
-                        c.x += 1;
-                        break;
-                }
-            }
-        }
-
-        public virtual void RunToBase() { }
-        public virtual void DoWork() { }
-
-        public virtual coords Cor
-        {
-            get { return c; }
-        }
-
-        public virtual string Job
-        {
-            get { return job; }
-        }
-    }
 
     class AntWorker : Ant
     {
-        public AntWorker(coords a)
+        public AntWorker(coordinates a)
             : base(a, "worker")
         {
 
@@ -80,10 +46,10 @@ namespace SpaceAnt
 
         public override void DoWork()
         {
-            c.x = rnd.Next(100);
-            c.y = rnd.Next(100);
+            coordinate.X = random.Next(100);
+            coordinate.Y = random.Next(100);
 
-            if (rnd.Next(100) < 5)
+            if (random.Next(100) < 5)
             {
                 Console.WriteLine("found food");
                 RunToBase();
@@ -92,8 +58,8 @@ namespace SpaceAnt
 
         public override void RunToBase()
         {
-            c.x = 5;
-            c.y = 5;
+            coordinate.X = 5;
+            coordinate.Y = 5;
         }
 
         public override string Job
@@ -101,34 +67,34 @@ namespace SpaceAnt
             get { return job; }
         }
 
-        public override coords Cor
+        public override coordinates Cor
         {
-            get { return c; }
+            get { return coordinate; }
         }
     }
 
     class AntSoldier : Ant
     {
-        public AntSoldier(coords a) : base(a, "soldier")
+        public AntSoldier(coordinates a) : base(a, "soldier")
         {
         }
 
         public override void RunToBase()
         {
-            c.x = 5;
-            c.y = 5;
+            coordinate.X = 5;
+            coordinate.Y = 5;
 
-            c.y += (int)MoveState.up;
+            coordinate.Y += (int)MoveStateForSolider.up;
             for (int i = 0; i < 2; i++)
             {
-                c.x += (int)MoveState.right;
-                c.y += (int)MoveState.down;
-                c.y += (int)MoveState.down;
-                c.x += (int)MoveState.left;
-                c.x += (int)MoveState.left;
-                c.y += (int)MoveState.up;
-                c.y += (int)MoveState.up;
-                c.x += (int)MoveState.right;
+                coordinate.X += (int)MoveStateForSolider.right;
+                coordinate.Y += (int)MoveStateForSolider.down;
+                coordinate.Y += (int)MoveStateForSolider.down;
+                coordinate.X += (int)MoveStateForSolider.left;
+                coordinate.X += (int)MoveStateForSolider.left;
+                coordinate.Y += (int)MoveStateForSolider.up;
+                coordinate.Y += (int)MoveStateForSolider.up;
+                coordinate.X += (int)MoveStateForSolider.right;
             }
         }
 
@@ -137,9 +103,9 @@ namespace SpaceAnt
             get { return job; }
         }
 
-        public override coords Cor
+        public override coordinates Cor
         {
-            get { return c; }
+            get { return coordinate; }
         }
     }
 
@@ -147,7 +113,7 @@ namespace SpaceAnt
     {
         private int amountAnts;
         public List<string> jobs;
-        public List<coords> c;
+        public List<coordinates> c;
 
         public int Amount
         {
@@ -196,15 +162,15 @@ namespace SpaceAnt
 
     class Swarm
     {
-        private coords c;
+        private coordinates c;
         private List<Ant> lst;
 
         private State s; //
 
         public Swarm()
         {
-            c.x = 5;
-            c.y = 5;
+            c.X = 5;
+            c.Y = 5;
 
             lst = new List<Ant>();
         }
@@ -272,9 +238,10 @@ namespace SpaceAnt
         {
             for (int i = 0; i < lst.Count; i++)
             {
-                Console.WriteLine("Number: " + i);
-                Console.WriteLine("Job: " + lst[i].Job);
-                Console.WriteLine("Coords: " + lst[i].Cor.x + " " + lst[i].Cor.y);
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.SetCursorPosition(lst[i].Cor.X, lst[i].Cor.Y);
+                Console.Write(".*.");
+                Console.ResetColor();
             }
         }
 
@@ -286,15 +253,20 @@ namespace SpaceAnt
     {
         static void Main(string[] args)
         {
+            Console.CursorVisible = false;
 
             Swarm a = new Swarm();
 
             a.GrowWorker();
             a.GrowWorker();
-            a.GrowSoldier();
-            a.MoveAll();
+            while(true)
+            {
+                a.MoveAll();
+                a.Show();
+                Thread.Sleep(200);
 
-            a.Show();
+                Console.Clear();
+            }
         }
     }
 }
