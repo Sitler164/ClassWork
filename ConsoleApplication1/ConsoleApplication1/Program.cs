@@ -12,6 +12,16 @@ namespace ConsoleApplication1
         {
             Console.WriteLine("Class Work");
             Console.WriteLine("Class Work");
+
+            /*
+             
+             
+             
+             Some code
+             
+             
+             
+             */
         }
     }
 }
