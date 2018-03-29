@@ -10,15 +10,8 @@ namespace ConsoleApplication1
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!!");
-            Console.WriteLine("Hello World!!");
-
-            Console.WriteLine("Hello World!!");
-            Console.WriteLine("Hello World!!");
-            Console.WriteLine("Hello World!!");
-
-
-
+            Console.WriteLine("Class Work");
+            Console.WriteLine("Class Work");
         }
     }
 }
