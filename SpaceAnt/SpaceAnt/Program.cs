@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ant
+namespace SpaceAnt
 {
     struct coords
     {
@@ -26,7 +26,7 @@ namespace ant
         protected coords c;
         protected Random rnd = new Random();
 
-       public Ant(coords c, string j)
+        public Ant(coords c, string j)
         {
             this.c = c;
             job = j;
@@ -73,7 +73,7 @@ namespace ant
     class AntWorker : Ant
     {
         public AntWorker(coords a)
-            :base(a,"worker")
+            : base(a, "worker")
         {
 
         }
@@ -109,7 +109,7 @@ namespace ant
 
     class AntSoldier : Ant
     {
-        public AntSoldier(coords a) : base(a,"soldier")
+        public AntSoldier(coords a) : base(a, "soldier")
         {
         }
 
@@ -146,7 +146,7 @@ namespace ant
     class State
     {
         private int amountAnts;
-        public List<string>jobs;
+        public List<string> jobs;
         public List<coords> c;
 
         public int Amount
@@ -280,7 +280,7 @@ namespace ant
 
     }
 
-   
+
 
     class Program
     {
@@ -298,4 +298,3 @@ namespace ant
         }
     }
 }
-
